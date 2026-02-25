@@ -7,23 +7,20 @@ package edu.kings;
  * 
  */
 public class Player {
-	String location;
-
 	
-public Player(String room) { // constructor
-		location = room;
+
+private Room location;
+	
+public Player(Room local) { // constructor
+		location = local;
 	}
 	
-public String getLocation() { // getter
+public Room getLocation() { // getter
 	return location;
 }
 
-public void setLocation(String newLocation) { // setter
-	this.location = newLocation;
+public void setLocation( Room newRoom) { // setter
+	location = newRoom;
 }
 
-public static void main(String[] args) {
-		Player obj = new Player("center of campus");
-		
-	}
 }
