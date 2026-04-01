@@ -3,12 +3,12 @@
  */
 package edu.kings;
 
-/**
- * 
- */
+
 public class Player {
 	
-
+ /** 
+  * this is the players current location. 
+  */
 private Room location;
 	
 public Player(Room local) { // constructor

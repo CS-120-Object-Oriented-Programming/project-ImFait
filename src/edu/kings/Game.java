@@ -19,15 +19,15 @@ public class Game {
 	/** The world where the game takes place. */
 	private World world;
 	/** The room the player character is currently in. */
-	private Room currentRoom;
 
+	private Player person; 
 	/**
 	 * Create the game and initialize its internal map.
 	 */
 	public Game() {
 		world = new World();
 		// set the starting room
-		currentRoom = world.getRoom("outside");
+		person = new Player (world.getRoom("outside"));
 	}
 
 	/**
@@ -99,23 +99,23 @@ public class Game {
 			// Try to leave current.
 			Door doorway = null;
 			if (direction.equals("north")) {
-				doorway = currentRoom.northExit;
+				doorway = person.getLocation().northExit;
 			}
 			if (direction.equals("east")) {
-				doorway = currentRoom.eastExit;
+				doorway = person.getLocation().eastExit;
 			}
 			if (direction.equals("south")) {
-				doorway = currentRoom.southExit;
+				doorway = person.getLocation().southExit;
 			}
 			if (direction.equals("west")) {
-				doorway = currentRoom.westExit;
+				doorway = person.getLocation().westExit;
 			}
 
 			if (doorway == null) {
 				Writer.println("There is no door!");
 			} else {
 				Room newRoom = doorway.getDestination();
-				currentRoom = newRoom;
+				person.setLocation(newRoom);
 				Writer.println(newRoom.getName() + ":");
 				Writer.println("You are " + newRoom.getDescription());
 				Writer.print("Exits: ");
@@ -165,19 +165,19 @@ public class Game {
 		Writer.println("Campus of Kings is a new, incredibly boring adventure game.");
 		Writer.println("Type 'help' if you need help.");
 		Writer.println();
-		Writer.println(currentRoom.getName() + ":");
-		Writer.println("You are " + currentRoom.getDescription());
+		Writer.println(person.getLocation().getName() + ":");
+		Writer.println("You are " + person.getLocation().getDescription());
 		Writer.print("Exits: ");
-		if (currentRoom.northExit != null) {
+		if (person.getLocation().northExit != null) {
 			Writer.print("north ");
 		}
-		if (currentRoom.eastExit != null) {
+		if (person.getLocation().eastExit != null) {
 			Writer.print("east ");
 		}
-		if (currentRoom.southExit != null) {
+		if (person.getLocation().southExit != null) {
 			Writer.print("south ");
 		}
-		if (currentRoom.westExit != null) {
+		if (person.getLocation().westExit != null) {
 			Writer.print("west ");
 		}
 		Writer.println("");
