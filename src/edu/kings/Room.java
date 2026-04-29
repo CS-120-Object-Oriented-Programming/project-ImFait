@@ -1,5 +1,5 @@
 package edu.kings;
-import java.util.HashMap;;
+import java.util.HashMap;
 /**
  * Class Room - a room in an adventure game.
  *
@@ -22,11 +22,26 @@ public class Room {
 	private String name;
 	/** The description of this room. */
 	private String description;
-	
+	/** Hash map.*/
 	HashMap<String, Door> allDoors = new HashMap<>();
 	
-	public Door getExit(String Direction) {
-		return allDoors.get(Direction);
+	/**
+	 * Create a room described "description". Initially, it has no exits.
+	 * "description" is something like "a kitchen" or "an open court yard".
+	 *
+	 * @param name  The room's name.
+	 * @param description
+	 *            The room's description.
+	 */
+	
+	public Room(String name, String description) {
+		this.name = name;
+		this.description = description;
+		counter++;
+	}
+	
+	public Door getExit(String direction) {
+		return allDoors.get(direction);
 	}
 	
 	public void setExit(String direction, Door neighbor) {
@@ -40,19 +55,7 @@ public class Room {
 	static {
 		counter = 0;
 	}
-	/**
-	 * Create a room described "description". Initially, it has no exits.
-	 * "description" is something like "a kitchen" or "an open court yard".
-	 *
-	 * @param name  The room's name.
-	 * @param description
-	 *            The room's description.
-	 */
-	public Room(String name, String description) {
-		this.name = name;
-		this.description = description;
-		counter++;
-	}
+	
 
 	/**
 	 * Returns the name of this room.

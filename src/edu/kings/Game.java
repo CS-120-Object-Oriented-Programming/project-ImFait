@@ -18,9 +18,13 @@ package edu.kings;
 public class Game {
 	/** The world where the game takes place. */
 	private World world;
-	/** The room the player character is currently in. */
-
+	/** The player themself. */
 	private Player person; 
+	/** Number of turns the player has made. */
+	private int turns = 0;
+	/** How many times player went. */
+	private int goAmount = 0;
+	
 	/**
 	 * Create the game and initialize its internal map.
 	 */
@@ -30,64 +34,6 @@ public class Game {
 		person = new Player (world.getRoom("outside"));
 	}
 
-	/**
-	 * Main play routine. Loops until end of play.
-	 */
-	public void play() {
-		printWelcome();
-
-		// Enter the main game loop. Here we repeatedly read commands and
-		// execute them until the game is over.
-		boolean wantToQuit = false;
-		while (!wantToQuit) {
-			Command command = Reader.getCommand();
-
-			wantToQuit = processCommand(command);
-			// other stuff that needs to happen every turn can be added here.
-		}
-		printGoodbye();
-	}
-
-	///////////////////////////////////////////////////////////////////////////
-	// Helper methods for processing the commands
-
-	/**
-	 * Given a command, process (that is: execute) the command.
-	 *
-	 * @param command
-	 *            The command to be processed.
-	 * @return true If the command ends the game, false otherwise.
-	 */
-	private boolean processCommand(Command command) {
-		boolean wantToQuit = false;
-		if (command.isUnknown()) {
-			Writer.println("I don't know what you mean...");
-		} else {
-
-			CommandEnum commandWord = command.getCommandWord();
-			switch (commandWord){
-			case CommandEnum.HELP:
-				printHelp();
-				break;
-			case CommandEnum.GO:
-				goRoom(command);
-				break;
-			case CommandEnum.QUIT:
-				wantToQuit = quit(command);
-				break;
-			case CommandEnum.LOOK:
-				look();
-				break;
-			default:
-				Writer.println(commandWord + " is not implemented yet!");
-				break;
-			}
-		}
-		return wantToQuit;
-	}
-	
-	
-	
 	///////////////////////////////////////////////////////////////////////////
 	// Helper methods for implementing all of the commands.
 	// It helps if you organize these in alphabetical order.
@@ -132,6 +78,68 @@ public class Game {
 	}
 	
 	/**
+	 * Main play routine. Loops until end of play.
+	 */
+	public void play() {
+		printWelcome();
+
+		// Enter the main game loop. Here we repeatedly read commands and
+		// execute them until the game is over.
+		boolean wantToQuit = false;
+		while (!wantToQuit) {
+			Command command = Reader.getCommand();
+			wantToQuit = processCommand(command);
+			// other stuff that needs to happen every turn can be added here.
+		}
+		printGoodbye();
+	}
+
+	///////////////////////////////////////////////////////////////////////////
+	// Helper methods for processing the commands
+
+	/**
+	 * Given a command, process (that is: execute) the command.
+	 *
+	 * @param command
+	 *            The command to be processed.
+	 * @return true If the command ends the game, false otherwise.
+	 */
+	private boolean processCommand(Command command) {
+		boolean wantToQuit = false;
+		if (command.isUnknown()) {
+			Writer.println("I don't know what you mean...");
+		} else {
+			CommandEnum commandWord = command.getCommandWord();
+			switch (commandWord){
+			case CommandEnum.HELP:
+				printHelp();
+				turns++;
+				break;
+			case CommandEnum.GO:
+				goRoom(command);
+				turns++;
+				goAmount++;
+				break;
+			case CommandEnum.QUIT:
+				wantToQuit = quit(command);
+				break;
+			case CommandEnum.LOOK:
+				look();
+				turns++;
+				break;
+			default:
+				Writer.println(commandWord + " is not implemented yet!");
+				break;
+			}
+		}
+		return wantToQuit;
+	}
+	
+	
+	
+	
+	
+	/**
 	 * Prints location info.
 	 */
 	
@@ -144,6 +152,7 @@ public class Game {
 	 */
 	private void printGoodbye() {
 		Writer.println("I hope you weren't too bored here on the Campus of Kings!");
+		Writer.println("you scored " + score() + "pts in " + turns + " turns.");
 		Writer.println("Thank you for playing.  Good bye.");
 	}
 
@@ -196,5 +205,10 @@ public class Game {
 			wantToQuit = false;
 		}
 		return wantToQuit;
+	}
+	
+	private int score() {
+		int score = goAmount * 10;
+		return score;
 	}
 }

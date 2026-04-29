@@ -57,8 +57,10 @@ public class World {
 	 *
 	 * @param from
 	 *            The room where the door originates.
-	 * @param north
-	 *            The room to the north of the originating room.
+	 * @param direction
+	 *            The direction (duh).
+	 * @param to
+	 * 			  Where to.
 	 */
 	private void createDoor(Room from, String direction, Room to) {
 		Door newDoor = new Door(to);
