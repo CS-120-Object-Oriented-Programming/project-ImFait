@@ -18,18 +18,65 @@ package edu.kings;
 public class Game {
 	/** The world where the game takes place. */
 	private World world;
-	/** The room the player character is currently in. */
-	private Room currentRoom;
-
+	/** The player themself. */
+	private Player person; 
+	/** Number of turns the player has made. */
+	private int turns = 0;
+	/** How many times player went. */
+	private int goAmount = 0;
+	
 	/**
 	 * Create the game and initialize its internal map.
 	 */
 	public Game() {
 		world = new World();
 		// set the starting room
-		currentRoom = world.getRoom("outside");
+		person = new Player (world.getRoom("outside"));
 	}
 
+	///////////////////////////////////////////////////////////////////////////
+	// Helper methods for implementing all of the commands.
+	// It helps if you organize these in alphabetical order.
+
+	/**
+	 * Try to go to one direction. If there is an exit, enter the new room,
+	 * otherwise print an error message.
+	 *
+	 * @param command
+	 *            The command to be processed.
+	 */
+	private void goRoom(Command command) {
+		if (!command.hasSecondWord()) {
+			// if there is no second word, we don't know where to go...
+			Writer.println("Go where?");
+		} else {
+			String direction = command.getRestOfLine();
+
+			// Try to leave current.
+			Door doorway = null;
+			if (direction.equals("north")) {
+				doorway = person.getLocation().getExit(direction);
+			}
+			if (direction.equals("east")) {
+				doorway = person.getLocation().getExit(direction);
+			}
+			if (direction.equals("south")) {
+				doorway = person.getLocation().getExit(direction);
+			}
+			if (direction.equals("west")) {
+				doorway = person.getLocation().getExit(direction);
+			}
+
+			if (doorway == null) {
+				Writer.println("There is no door!");
+			} else {
+				Room newRoom = doorway.getDestination();
+				person.setLocation(newRoom);
+				printLocationInformation();
+			}
+		}
+	}
+	
 	/**
 	 * Main play routine. Loops until end of play.
 	 */
@@ -59,88 +106,53 @@ public class Game {
 	 */
 	private boolean processCommand(Command command) {
 		boolean wantToQuit = false;
-
 		if (command.isUnknown()) {
 			Writer.println("I don't know what you mean...");
 		} else {
-
-			String commandWord = command.getCommandWord();
-			if (commandWord.equals("help")) {
+			CommandEnum commandWord = command.getCommandWord();
+			switch (commandWord){
+			case CommandEnum.HELP:
 				printHelp();
-			} else if (commandWord.equals("go")) {
+				turns++;
+				break;
+			case CommandEnum.GO:
 				goRoom(command);
-			} else if (commandWord.equals("quit")) {
+				turns++;
+				goAmount++;
+				break;
+			case CommandEnum.QUIT:
 				wantToQuit = quit(command);
-			} else {
+				break;
+			case CommandEnum.LOOK:
+				look();
+				turns++;
+				break;
+			default:
 				Writer.println(commandWord + " is not implemented yet!");
+				break;
 			}
 		}
 		return wantToQuit;
 	}
-
-	///////////////////////////////////////////////////////////////////////////
-	// Helper methods for implementing all of the commands.
-	// It helps if you organize these in alphabetical order.
-
+	
+	
+	
+	
+	
 	/**
-	 * Try to go to one direction. If there is an exit, enter the new room,
-	 * otherwise print an error message.
-	 *
-	 * @param command
-	 *            The command to be processed.
+	 * Prints location info.
 	 */
-	private void goRoom(Command command) {
-		if (!command.hasSecondWord()) {
-			// if there is no second word, we don't know where to go...
-			Writer.println("Go where?");
-		} else {
-			String direction = command.getRestOfLine();
-
-			// Try to leave current.
-			Door doorway = null;
-			if (direction.equals("north")) {
-				doorway = currentRoom.northExit;
-			}
-			if (direction.equals("east")) {
-				doorway = currentRoom.eastExit;
-			}
-			if (direction.equals("south")) {
-				doorway = currentRoom.southExit;
-			}
-			if (direction.equals("west")) {
-				doorway = currentRoom.westExit;
-			}
-
-			if (doorway == null) {
-				Writer.println("There is no door!");
-			} else {
-				Room newRoom = doorway.getDestination();
-				currentRoom = newRoom;
-				Writer.println(newRoom.getName() + ":");
-				Writer.println("You are " + newRoom.getDescription());
-				Writer.print("Exits: ");
-				if (newRoom.northExit != null) {
-					Writer.print("north ");
-				}
-				if (newRoom.eastExit != null) {
-					Writer.print("east ");
-				}
-				if (newRoom.southExit != null) {
-					Writer.print("south ");
-				}
-				if (newRoom.westExit != null) {
-					Writer.print("west ");
-				}
-				Writer.println();
-			}
-		}
+	
+	private void look() {
+		printLocationInformation();
 	}
-
+	
 	/**
 	 * Print out the closing message for the player.
 	 */
 	private void printGoodbye() {
 		Writer.println("I hope you weren't too bored here on the Campus of Kings!");
+		Writer.println("you scored " + score() + "pts in " + turns + " turns.");
 		Writer.println("Thank you for playing.  Good bye.");
 	}
 
@@ -153,9 +165,18 @@ public class Game {
 		Writer.println("around at the university.");
 		Writer.println();
 		Writer.println("Your command words are:");
-		Writer.println("   go quit help");
+		Writer.println("   go look quit help");
 	}
-
+	
+	/**
+	* Prints out the current location and exits.
+	*/
+	private void printLocationInformation() {
+		Writer.println(person.getLocation().toString());
+	}
+	
+	
+	
 	/**
 	 * Print out the opening message for the player.
 	 */
@@ -165,21 +186,7 @@ public class Game {
 		Writer.println("Campus of Kings is a new, incredibly boring adventure game.");
 		Writer.println("Type 'help' if you need help.");
 		Writer.println();
-		Writer.println(currentRoom.getName() + ":");
-		Writer.println("You are " + currentRoom.getDescription());
-		Writer.print("Exits: ");
-		if (currentRoom.northExit != null) {
-			Writer.print("north ");
-		}
-		if (currentRoom.eastExit != null) {
-			Writer.print("east ");
-		}
-		if (currentRoom.southExit != null) {
-			Writer.print("south ");
-		}
-		if (currentRoom.westExit != null) {
-			Writer.print("west ");
-		}
+		printLocationInformation();
 		Writer.println("");
 	}
 
@@ -198,5 +205,10 @@ public class Game {
 			wantToQuit = false;
 		}
 		return wantToQuit;
+	}
+	
+	private int score() {
+		int score = goAmount * 10;
+		return score;
 	}
 }

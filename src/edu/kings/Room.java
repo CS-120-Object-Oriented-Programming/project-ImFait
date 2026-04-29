@@ -1,4 +1,5 @@
 package edu.kings;
+import java.util.HashMap;
 /**
  * Class Room - a room in an adventure game.
  *
@@ -21,22 +22,9 @@ public class Room {
 	private String name;
 	/** The description of this room. */
 	private String description;
-
-	/** This room's north exit, null if none exits. */
-	public Door northExit;
-	/** This room's south exit, null if none exits. */
-	public Door southExit;
-	/** This room's east exit, null if none exits. */
-	public Door eastExit;
-	/** This room's west exit, null if none exits. */
-	public Door westExit;
-
-	/**
-	 * Static initializer.
-	 */
-	static {
-		counter = 0;
-	}
+	/** Hash map.*/
+	HashMap<String, Door> allDoors = new HashMap<>();
+	
 	/**
 	 * Create a room described "description". Initially, it has no exits.
 	 * "description" is something like "a kitchen" or "an open court yard".
@@ -45,11 +33,29 @@ public class Room {
 	 * @param description
 	 *            The room's description.
 	 */
+	
 	public Room(String name, String description) {
 		this.name = name;
 		this.description = description;
 		counter++;
 	}
+	
+	public Door getExit(String direction) {
+		return allDoors.get(direction);
+	}
+	
+	public void setExit(String direction, Door neighbor) {
+		allDoors.put(direction, neighbor);
+	}
+	
+	
+	/**
+	 * Static initializer.
+	 */
+	static {
+		counter = 0;
+	}
+	
 
 	/**
 	 * Returns the name of this room.
@@ -76,4 +82,16 @@ public class Room {
 	public static int getCounter() {
 		return counter;
 	}
+	
+	public String toString() {
+		String retVal =
+		getName() + ": " +
+		getDescription() +
+		"\n Exits: ";
+		for (String nextDoor: allDoors.keySet()) {
+			retVal += nextDoor + " ";
+		}
+		return retVal + "\n";
+	}
+	
 }
