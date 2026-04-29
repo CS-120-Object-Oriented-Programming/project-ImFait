@@ -41,6 +41,7 @@ public class Game {
 		boolean wantToQuit = false;
 		while (!wantToQuit) {
 			Command command = Reader.getCommand();
+
 			wantToQuit = processCommand(command);
 			// other stuff that needs to happen every turn can be added here.
 		}
@@ -59,25 +60,34 @@ public class Game {
 	 */
 	private boolean processCommand(Command command) {
 		boolean wantToQuit = false;
-
 		if (command.isUnknown()) {
 			Writer.println("I don't know what you mean...");
 		} else {
 
-			String commandWord = command.getCommandWord();
-			if (commandWord.equals("help")) {
+			CommandEnum commandWord = command.getCommandWord();
+			switch (commandWord){
+			case CommandEnum.HELP:
 				printHelp();
-			} else if (commandWord.equals("go")) {
+				break;
+			case CommandEnum.GO:
 				goRoom(command);
-			} else if (commandWord.equals("quit")) {
+				break;
+			case CommandEnum.QUIT:
 				wantToQuit = quit(command);
-			} else {
+				break;
+			case CommandEnum.LOOK:
+				look();
+				break;
+			default:
 				Writer.println(commandWord + " is not implemented yet!");
+				break;
 			}
 		}
 		return wantToQuit;
 	}
-
+	
+	
+	
 	///////////////////////////////////////////////////////////////////////////
 	// Helper methods for implementing all of the commands.
 	// It helps if you organize these in alphabetical order.
@@ -99,16 +109,16 @@ public class Game {
 			// Try to leave current.
 			Door doorway = null;
 			if (direction.equals("north")) {
-				doorway = person.getLocation().northExit;
+				doorway = person.getLocation().getExit(direction);
 			}
 			if (direction.equals("east")) {
-				doorway = person.getLocation().eastExit;
+				doorway = person.getLocation().getExit(direction);
 			}
 			if (direction.equals("south")) {
-				doorway = person.getLocation().southExit;
+				doorway = person.getLocation().getExit(direction);
 			}
 			if (direction.equals("west")) {
-				doorway = person.getLocation().westExit;
+				doorway = person.getLocation().getExit(direction);
 			}
 
 			if (doorway == null) {
@@ -116,26 +126,19 @@ public class Game {
 			} else {
 				Room newRoom = doorway.getDestination();
 				person.setLocation(newRoom);
-				Writer.println(newRoom.getName() + ":");
-				Writer.println("You are " + newRoom.getDescription());
-				Writer.print("Exits: ");
-				if (newRoom.northExit != null) {
-					Writer.print("north ");
-				}
-				if (newRoom.eastExit != null) {
-					Writer.print("east ");
-				}
-				if (newRoom.southExit != null) {
-					Writer.print("south ");
-				}
-				if (newRoom.westExit != null) {
-					Writer.print("west ");
-				}
-				Writer.println();
+				printLocationInformation();
 			}
 		}
 	}
-
+	
+	/**
+	 * Prints location info.
+	 */
+	
+	private void look() {
+		printLocationInformation();
+	}
+	
 	/**
 	 * Print out the closing message for the player.
 	 */
@@ -153,9 +156,18 @@ public class Game {
 		Writer.println("around at the university.");
 		Writer.println();
 		Writer.println("Your command words are:");
-		Writer.println("   go quit help");
+		Writer.println("   go look quit help");
 	}
-
+	
+	/**
+	* Prints out the current location and exits.
+	*/
+	private void printLocationInformation() {
+		Writer.println(person.getLocation().toString());
+	}
+	
+	
+	
 	/**
 	 * Print out the opening message for the player.
 	 */
@@ -165,21 +177,7 @@ public class Game {
 		Writer.println("Campus of Kings is a new, incredibly boring adventure game.");
 		Writer.println("Type 'help' if you need help.");
 		Writer.println();
-		Writer.println(person.getLocation().getName() + ":");
-		Writer.println("You are " + person.getLocation().getDescription());
-		Writer.print("Exits: ");
-		if (person.getLocation().northExit != null) {
-			Writer.print("north ");
-		}
-		if (person.getLocation().eastExit != null) {
-			Writer.print("east ");
-		}
-		if (person.getLocation().southExit != null) {
-			Writer.print("south ");
-		}
-		if (person.getLocation().westExit != null) {
-			Writer.print("west ");
-		}
+		printLocationInformation();
 		Writer.println("");
 	}
 
