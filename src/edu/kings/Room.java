@@ -1,5 +1,6 @@
 package edu.kings;
 import java.util.HashMap;
+import java.util.ArrayList;
 /**
  * Class Room - a room in an adventure game.
  *
@@ -24,20 +25,38 @@ public class Room {
 	private String description;
 	/** Hash map.*/
 	HashMap<String, Door> allDoors = new HashMap<>();
+	/** List of all items in given room.*/
+	private ArrayList<Item> itemList = new ArrayList<Item>();
+	/** item in current room.*/
+	private Item item;
 	
 	/**
 	 * Create a room described "description". Initially, it has no exits.
 	 * "description" is something like "a kitchen" or "an open court yard".
 	 *
-	 * @param name  The room's name.
-	 * @param description
-	 *            The room's description.
+	 * @param name	The room's name.
+	 * @param description	The room's description.
+	 * @param item	any item in the room
 	 */
 	
-	public Room(String name, String description) {
+	public Room(String name, String description, Item item) {
 		this.name = name;
 		this.description = description;
+		this.item = item;
 		counter++;
+	}
+	
+	public void addItem(Item roomItem) {
+		itemList.add(roomItem);
+	}
+	
+	public Item getItem(Room room) {
+		return this.item;
+	}
+	
+	public void removeItem(Item roomItem) {
+		itemList.remove(roomItem);
+		Writer.println(roomItem.getName() + " has been removed from " + this.name + ".");
 	}
 	
 	public Door getExit(String direction) {

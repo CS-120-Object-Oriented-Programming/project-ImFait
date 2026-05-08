@@ -31,7 +31,7 @@ public class Game {
 	public Game() {
 		world = new World();
 		// set the starting room
-		person = new Player (world.getRoom("outside"));
+		person = new Player (world.getRoom("entrance"));
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -127,6 +127,28 @@ public class Game {
 				look();
 				turns++;
 				break;
+			case CommandEnum.SEARCH:
+				search();
+				turns++;
+				break;
+			case CommandEnum.TAKE:
+				person.pickUp(person.getLocation().getItem(person.getLocation()));
+				turns++;
+				break;
+			case CommandEnum.EXAMINE:
+				examine(person.getLocation().getItem(person.getLocation()));
+				break;
+			case CommandEnum.DROP:
+				dropItem(command);
+				break;
+			case CommandEnum.INVENTORY:
+				Writer.println("your inventory: " + person.getInventory());
+				break;
+			case CommandEnum.PLAY:
+				if (person.getLocation() == world.getRoom("tables")) {
+					Blackjack.play();
+				}	else { Writer.println("not here...");}
+				break;
 			default:
 				Writer.println(commandWord + " is not implemented yet!");
 				break;
@@ -135,8 +157,27 @@ public class Game {
 		return wantToQuit;
 	}
 	
+	private void dropItem(Command command) {
+		
+		if (!command.hasSecondWord()) {
+			Writer.println("What are you trying to drop?");
+		} else {
+			String itemString = command.getRestOfLine(); 
+			person.dropItem(null);
+		}
+	}
 	
+	private void examine(Item item) {
+		Writer.println("you examine the " + person.getLocation().getItem(person.getLocation()).getName() + ": it is a " + item.getDescription());
+	}
 	
+	private void search() {
+		if (person.getLocation().getItem(person.getLocation()) != null) {
+		Writer.println("You searched the room and found: ");
+		Writer.println(person.getLocation().getItem(person.getLocation()));
+		Writer.println("Type take to pick up.");
+		} else { Writer.println("You searched and found... nothing."); }
+	}
 	
 	
 	/**
@@ -151,7 +192,7 @@ public class Game {
 	 * Print out the closing message for the player.
 	 */
 	private void printGoodbye() {
-		Writer.println("I hope you weren't too bored here on the Campus of Kings!");
+		Writer.println("99% of gamblers quit before their big win...");
 		Writer.println("you scored " + score() + "pts in " + turns + " turns.");
 		Writer.println("Thank you for playing.  Good bye.");
 	}
@@ -165,7 +206,7 @@ public class Game {
 		Writer.println("around at the university.");
 		Writer.println();
 		Writer.println("Your command words are:");
-		Writer.println("   go look quit help");
+		Writer.println(" go, look, quit, help, search, inventory");
 	}
 	
 	/**
@@ -182,8 +223,7 @@ public class Game {
 	 */
 	private void printWelcome() {
 		Writer.println();
-		Writer.println("Welcome to the Campus of Kings!");
-		Writer.println("Campus of Kings is a new, incredibly boring adventure game.");
+		Writer.println("Welcome to Lemon Pit TBA.");
 		Writer.println("Type 'help' if you need help.");
 		Writer.println();
 		printLocationInformation();

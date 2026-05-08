@@ -20,7 +20,7 @@ public class CommandWords {
 	 * Static block to initialize the fields of CommandWords.
 	 */
 	static {
-		CommandEnum[] tempCommands = {CommandEnum.GO, CommandEnum.HELP, CommandEnum.LOOK, CommandEnum.QUIT};
+		CommandEnum[] tempCommands = {CommandEnum.GO, CommandEnum.HELP, CommandEnum.LOOK, CommandEnum.QUIT, CommandEnum.SEARCH, CommandEnum.TAKE, CommandEnum.EXAMINE, CommandEnum.PLAY, CommandEnum.HIT,CommandEnum.STAND, CommandEnum.INVENTORY};
 		validCommands = tempCommands;
 	}
 	
@@ -35,9 +35,24 @@ public class CommandWords {
 			retVal = CommandEnum.HELP;
 		} else if (theString.equals("look")) {
 			retVal = CommandEnum.LOOK;
+		} else if (theString.equals("search")){
+			retVal = CommandEnum.SEARCH;
+		} else if (theString.equals("take")) {
+			retVal = CommandEnum.TAKE;
+		} else if (theString.equals("examine")) {
+			retVal = CommandEnum.EXAMINE;
+		} else if (theString.equals("hit")) {
+			retVal = CommandEnum.HIT;
+		} else if (theString.equals("stand")) {
+			retVal = CommandEnum.STAND;
+		} else if (theString.equals("inventory")){
+			retVal = CommandEnum.INVENTORY;
+		} else if (theString.equals("play")){
+			retVal = CommandEnum.PLAY;
 		} else { 
 			retVal = null;
 		}
+
 
 		return retVal;
 	} 

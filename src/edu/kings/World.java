@@ -24,8 +24,11 @@ public class World {
 	public World() {
 		rooms = new HashMap<String, Room>();
 		createRooms();
+		
 	}
 
+	
+	
 	/**
 	 * This method takes care of creating all of the aspects of the world for
 	 * the "Campus of Kings" application.
@@ -67,53 +70,61 @@ public class World {
 		rooms.get(from.getName().toLowerCase()).allDoors.put(direction, newDoor);
 		
 	}
-
+	
 	private void createRooms() {
-		// Creating all the rooms.
-		Room outside = new Room("Outside", "outside in the center of the King's College campus.");
-		Room holyCross = new Room("Holy Cross", "at one of two main dormitories on campus.");
-		Room essef = new Room("Essef", "at the other main dormitory on campus.");
-		Room campusCenter = new Room("Campus Center", "in the center of student activities on campus.");
-		Room admin = new Room("Admin", "in the oldest building on campus and home to the computer science department.");
-		Room slivaOffice = new Room("Sliva's Office", "in Dr Sliva's office.");
-		Room janoskiOffice = new Room("Janoski's Office", "in Dr Janoski's office.");
-		Room lab = new Room("Computer Lab", "in the Computer Science and Math computing lab.");
-		Room classroom = new Room("Classroom", "in the classroom where the computer science classes are taught.");
-
-		// Adding all the rooms to the world.
-		this.addRoom(outside);
-		this.addRoom(holyCross);
-		this.addRoom(essef);
-		this.addRoom(campusCenter);
-		this.addRoom(admin);
-		this.addRoom(slivaOffice);
-		this.addRoom(janoskiOffice);
-		this.addRoom(lab);
-		this.addRoom(classroom);
-
-		// Creating all the doors between the rooms.
-		this.createDoor(essef, "south", outside);
-		this.createDoor(outside, "north", essef);
-
-		this.createDoor(campusCenter,"east", outside);
-		this.createDoor(outside,"west", campusCenter);
-
-		this.createDoor(outside, "east", holyCross);
-		this.createDoor(holyCross,"west", outside);
-
-		this.createDoor(outside,"south", admin);
-		this.createDoor(admin,"north", outside);
-
-		this.createDoor(admin, "east", lab);
-		this.createDoor(lab,"west", admin);
-
-		this.createDoor(admin,"south", janoskiOffice);
-		this.createDoor(janoskiOffice,"north", admin);
-
-		this.createDoor(admin,"west", slivaOffice);
-		this.createDoor(slivaOffice, "east", admin);
-
-		this.createDoor(lab,"south", classroom);
-		this.createDoor(classroom,"north", lab);
+		// item creation (i couldnt figure out the function so this is my improv)
+		Item cracker = new Item("crackers" , "small bag of saltines, honestly not bad for this place." , 1 , 0);
+		Item bottle = new Item("bottle", "empty bottle.. thats literally it", 0, 1);
+		
+		
+		// Template: Room placeholder = new Room("" , "" , null);
+		//casino rooms
+		Room entrance = new Room("Entrance" , "old rundown looking entrance, there is a large half lit neon sign that says 'The Lemon Pit casino!'" , null);
+		Room lobby = new Room("lobby" , "in the lobby there is a exchange desk... though they stopped using chips years ago" , null);
+		Room slots = new Room("slots" , "multiple rows of old slot machines, some not working, it feels like they go as far as the eye can see..." , null);
+		Room bathroom = new Room("bathroom" , "mens and womens bathrooms, looks gross" , null);
+		Room cafeteria = new Room("cafeteria" , "a small cafeteria with the worst food you have had the misfortune of tasting." , cracker);
+		Room tables = new Room("tables" , "a bunch of tables with all different kinds of card games... type play for blackjack", null);
+		Room bar = new Room("bar" , "a small wooden bar with more people than any room of the casino.. \nhas the smell of cheap booze and dead dreams" , bottle);
+		Room roulette = new Room("roulette" , "a big roulette table.. you feel an urge to go all in on red..." , null);
+		
+		// new room stuff
+		this.addRoom(entrance);
+		this.addRoom(lobby);
+		this.addRoom(slots);
+		this.addRoom(bathroom);
+		this.addRoom(cafeteria);
+		this.addRoom(tables);
+		this.addRoom(bar);
+		this.addRoom(roulette);
+		
+		//doors for casino
+		this.createDoor(entrance, "north", lobby);
+		this.createDoor(lobby, "south", entrance);
+		
+		this.createDoor(lobby, "north", slots);
+		this.createDoor(slots, "south", lobby);
+		
+		this.createDoor(slots, "west", bathroom);
+		this.createDoor(bathroom, "east", slots);
+		
+		this.createDoor(slots, "east", cafeteria);
+		this.createDoor(cafeteria, "west", slots);
+		
+		this.createDoor(slots, "north", tables);
+		this.createDoor(tables, "south", slots);
+		
+		this.createDoor(bar, "west", tables);
+		this.createDoor(tables, "east", bar);
+		
+		this.createDoor(tables, "west", roulette);
+		this.createDoor(roulette, "east", tables);
+		
+		this.createDoor(bathroom, "north", roulette);
+		this.createDoor(roulette, "south", bathroom);
+		
+		this.createDoor(bar, "south", cafeteria);
+		this.createDoor(cafeteria, "north", bar);
+		
 	}
 }
