@@ -75,12 +75,13 @@ public class World {
 		// item creation (i couldnt figure out the function so this is my improv)
 		Item cracker = new Item("crackers" , "small bag of saltines, honestly not bad for this place." , 1 , 0);
 		Item bottle = new Item("bottle", "empty bottle.. thats literally it", 0, 1);
+		Item cigarette = new Item("cigarette", "cheap cigarette on the house, least they can do for taking your money", 0, 0);
 		
 		
 		// Template: Room placeholder = new Room("" , "" , null);
 		//casino rooms
 		Room entrance = new Room("Entrance" , "old rundown looking entrance, there is a large half lit neon sign that says 'The Lemon Pit casino!'" , null);
-		Room lobby = new Room("lobby" , "in the lobby there is a exchange desk... though they stopped using chips years ago" , null);
+		Room lobby = new Room("lobby" , "in the lobby there is a exchange desk... though they stopped using chips years ago" , cigarette);
 		Room slots = new Room("slots" , "multiple rows of old slot machines, some not working, it feels like they go as far as the eye can see..." , null);
 		Room bathroom = new Room("bathroom" , "mens and womens bathrooms, looks gross" , null);
 		Room cafeteria = new Room("cafeteria" , "a small cafeteria with the worst food you have had the misfortune of tasting." , cracker);

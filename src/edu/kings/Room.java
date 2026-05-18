@@ -56,7 +56,8 @@ public class Room {
 	
 	public void removeItem(Item roomItem) {
 		itemList.remove(roomItem);
-		Writer.println(roomItem.getName() + " has been removed from " + this.name + ".");
+		Writer.println(roomItem.getName() + " has been removed from " + this.name + ". (suposedly)");
+		this.item = null;
 	}
 	
 	public Door getExit(String direction) {
