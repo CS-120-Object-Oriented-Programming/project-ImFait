@@ -1,4 +1,6 @@
 package edu.kings;
+import java.util.HashMap;
+import java.util.ArrayList;
 /**
  * Class Room - a room in an adventure game.
  *
@@ -21,35 +23,59 @@ public class Room {
 	private String name;
 	/** The description of this room. */
 	private String description;
-
-	/** This room's north exit, null if none exits. */
-	public Door northExit;
-	/** This room's south exit, null if none exits. */
-	public Door southExit;
-	/** This room's east exit, null if none exits. */
-	public Door eastExit;
-	/** This room's west exit, null if none exits. */
-	public Door westExit;
-
+	/** Hash map.*/
+	HashMap<String, Door> allDoors = new HashMap<>();
+	/** List of all items in given room.*/
+	private ArrayList<Item> itemList = new ArrayList<Item>();
+	/** item in current room.*/
+	private Item item;
+	
+	/**
+	 * Create a room described "description". Initially, it has no exits.
+	 * "description" is something like "a kitchen" or "an open court yard".
+	 *
+	 * @param name	The room's name.
+	 * @param description	The room's description.
+	 * @param item	any item in the room
+	 */
+	
+	public Room(String name, String description, Item item) {
+		this.name = name;
+		this.description = description;
+		this.item = item;
+		counter++;
+	}
+	
+	public void addItem(Item roomItem) {
+		itemList.add(roomItem);
+	}
+	
+	public Item getItem(Room room) {
+		return this.item;
+	}
+	
+	public void removeItem(Item roomItem) {
+		itemList.remove(roomItem);
+		Writer.println(roomItem.getName() + " has been removed from " + this.name + ". (suposedly)");
+		this.item = null;
+	}
+	
+	public Door getExit(String direction) {
+		return allDoors.get(direction);
+	}
+	
+	public void setExit(String direction, Door neighbor) {
+		allDoors.put(direction, neighbor);
+	}
+	
+	
 	/**
 	 * Static initializer.
 	 */
 	static {
 		counter = 0;
 	}
-	/**
-	 * Create a room described "description". Initially, it has no exits.
-	 * "description" is something like "a kitchen" or "an open court yard".
-	 *
-	 * @param name  The room's name.
-	 * @param description
-	 *            The room's description.
-	 */
-	public Room(String name, String description) {
-		this.name = name;
-		this.description = description;
-		counter++;
-	}
+	
 
 	/**
 	 * Returns the name of this room.
@@ -76,4 +102,16 @@ public class Room {
 	public static int getCounter() {
 		return counter;
 	}
+	
+	public String toString() {
+		String retVal =
+		getName() + ": " +
+		getDescription() +
+		"\n Exits: ";
+		for (String nextDoor: allDoors.keySet()) {
+			retVal += nextDoor + " ";
+		}
+		return retVal + "\n";
+	}
+	
 }

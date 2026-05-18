@@ -63,7 +63,9 @@ public class Reader {
         // with it. If not, create a "null" command (for unknown command).
         Command result = null;
         if (CommandWords.isCommand(word1)) {
-            result = new Command(word1, restOfLine);
+            result = new Command(CommandWords.getCommand(word1), restOfLine);
+            
+        	
         }
         else {
             result = new Command(null, restOfLine);
